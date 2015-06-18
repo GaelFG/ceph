@@ -290,51 +290,6 @@ default site.
 .. note:: Failure to disable the default site can lead to problems.
 
 
-Add a FastCGI Script 
---------------------
-
-FastCGI requires a script for each Ceph Object Gateway instance to
-enable the S3-compatible interface. To create the script, execute 
-the following procedures. 
-
-
-#. Go to the ``/var/www`` directory. :: 
-
-	cd /var/www
-
-#. Open an editor with the file name ``s3gw.fcgi``. **Note:** The configuration
-   file specifies this filename. :: 
-
-	sudo vim s3gw.fcgi
-
-#. Add a shell script with ``exec`` and the path to the gateway binary, 
-   the path to the Ceph configuration file, and the user name (``-n``; 
-   the same user name created in step 2 of `Create a Keyring`_. 
-   Copy the following into the editor. ::
-
-	#!/bin/sh
-	exec /usr/bin/radosgw -c /etc/ceph/ceph.conf -n client.radosgw.{ID}
-
-   For example:: 
-
-	#!/bin/sh
-	exec /usr/bin/radosgw -c /etc/ceph/ceph.conf -n client.radosgw.us-east-1
-
-#. Save the file. 
-
-#. Change the permissions on the file so that it is executable. :: 
-
-	sudo chmod +x s3gw.fcgi
-
-
-Repeat the process for the secondary zone.
-
-.. note:: When you use this procedure to configure the secondary region, 
-   replace ``us-`` with ``eu-``. You will have a total of four FastCGI scripts
-   **after** you create the master region and the secondary region.
-
-
-
 Add Instances to Ceph Config File
 ---------------------------------
 
